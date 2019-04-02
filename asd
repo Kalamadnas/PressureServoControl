@@ -1,4 +1,3 @@
-
 #include <SD.h>
 #include <Wire.h>
 #include "SparkFunMPL3115A2.h"
@@ -31,7 +30,7 @@ const int writeLed = 8;           // LED indicator for writing to card
 const int errorLed = 13;          // LED indicator for error
 long lastWriteTime = 0;           // timestamp for last write attempt
 const int interval = 2000;            // time between readings
-const int timer = 1000;            // aikaraja jonka jälkeen laskuvarjo voidaan vapauttaa
+const int timer =3600000;            // aikaraja jonka jälkeen laskuvarjo voidaan vapauttaa
 char fileName[] = "datalog.txt";  // filename to save on SD card
 
 void setup() {
@@ -120,6 +119,8 @@ void loop() {
   //  count++;
 
   long x = myPressure.readAltitude();
+  if (x >= 0 && x <= 50000)
+  {
   samples.add(x);
 
   //  float l = samples.getLowest();
@@ -156,7 +157,7 @@ void loop() {
   //-------------------------median juttua loppuu
 
   
-     if (millis() >=  timer && m <= 200)
+     if (millis() >=  timer && m <= 120)
      { 
        for (posA = 0; posA <= 180; posA += 1) 
         { // goes from 0 degrees to 180 degrees
@@ -165,7 +166,7 @@ void loop() {
         delay(15);                       // waits 15ms for the servo to reach the position
         }
      }  
-   
+  }
   digitalWrite(writeLed, LOW);      // turn off the write LED
   Serial.println();   
   }  
